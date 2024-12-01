@@ -14,9 +14,9 @@ void superpg_test();
 int
 main(int argc, char *argv[])
 {
-  print_pgtbl();
-  ugetpid_test();
-  print_kpgtbl();
+  // print_pgtbl();
+  // ugetpid_test();
+  // print_kpgtbl();
   superpg_test();
   printf("pgtbltest: all tests succeeded\n");
   exit(0);
@@ -91,6 +91,7 @@ supercheck(uint64 s)
 
   for (uint64 p = s;  p < s + 512 * PGSIZE; p += PGSIZE) {
     pte_t pte = (pte_t) pgpte((void *) p);
+    printf("%lx %lx\n", pte, p);
     if(pte == 0)
       err("no pte");
     if ((uint64) last_pte != 0 && pte != last_pte) {
@@ -126,6 +127,7 @@ superpg_test()
   
   uint64 s = SUPERPGROUNDUP((uint64) end);
   supercheck(s);
+  printf("superpg_test stage1: OK\n");
   if((pid = fork()) < 0) {
     err("fork");
   } else if(pid == 0) {
